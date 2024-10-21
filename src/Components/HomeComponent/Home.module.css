@@ -1,0 +1,144 @@
+/* Base styles */
+body {
+    margin: 0;
+}
+
+#header {
+    background-color: rgba(0, 0, 0, 0.9);
+    height: 50px;
+    width: 100%;
+    position: fixed;
+    z-index: 1;
+}
+
+#headerHeadingBox {
+    height: 50px;
+    color: rgba(255, 255, 255, 0.95);
+    letter-spacing: 1.6;
+    font-size: x-large;
+    margin-left: 40px;
+    display: flex;
+    align-items: center;
+    /* Center text vertically */
+}
+
+#headerHeadingBox h3 {
+    margin: 0;
+    padding: 10px 0 0 10px;
+}
+
+/* Content styles */
+#div1,
+#div2 {
+    width: 100%;
+    /* Full width */
+    margin-top: 80px;
+    /* Space for fixed header */
+    text-align: center;
+}
+
+#div1 {
+    height: 150px;
+}
+
+#div1 img {
+    margin-top: 8vh;
+    height: 110px;
+    width: 150px;
+}
+
+#div1 span {
+    display: block;
+    font-size: x-large;
+}
+
+#div2 {
+    height: auto;
+    /* Allow height to adjust based on content */
+    margin-top: 30px;
+}
+
+.div3 {
+    height: auto;
+    /* Allow height to adjust based on content */
+    margin: 20px;
+    /* Margin for spacing */
+    text-align: center;
+    display: inline-block;
+    /* Allow multiple .div3 elements to sit next to each other */
+}
+
+.div3 img {
+    height: 250px;
+    width: 300px;
+    margin-top: 20px;
+    border: 1px solid black;
+}
+
+.div3 span {
+    display: block;
+    font-size: x-large;
+}
+
+.div3 a {
+    color: black;
+    text-decoration: none;
+}
+
+/* Responsive styles */
+@media (max-width: 1200px) {
+    #headerHeadingBox {
+        margin-left: 20px;
+        /* Reduce margin on larger screens */
+    }
+
+    .div3 {
+        width: calc(50% - 40px);
+        /* Two columns */
+        margin: 20px;
+        /* Adjust margin for spacing */
+    }
+}
+
+@media (max-width: 768px) {
+    #headerHeadingBox {
+        font-size: large;
+        /* Smaller font size for medium screens */
+    }
+
+    .div3 {
+        width: calc(100% - 40px);
+        /* Full width on smaller screens */
+        margin: 10px 20px;
+        /* Adjust margin for spacing */
+    }
+
+    #div1 {
+        height: auto;
+        /* Adjust height based on content */
+    }
+
+    #div1 img {
+        width: 100%;
+        /* Responsive image width */
+        max-width: 150px;
+        /* Maintain max width */
+    }
+}
+
+@media (max-width: 480px) {
+    #headerHeadingBox {
+        font-size: medium;
+        /* Smaller font size for mobile screens */
+    }
+
+    #div1 img {
+        max-width: 100%;
+        /* Full width for mobile */
+    }
+
+    .div3 img {
+        max-width: 100%;
+        /* Responsive image width */
+    }
+}

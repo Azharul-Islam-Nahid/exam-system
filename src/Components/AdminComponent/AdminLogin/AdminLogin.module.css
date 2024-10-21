@@ -1,0 +1,177 @@
+body {
+    background-color: #ecedf3;
+    margin: 0;
+    /* Reset default margin */
+}
+
+/* -------------------------------------------------------------- */
+
+#container {
+    background-color: white;
+    height: auto;
+    /* Use auto height for responsive behavior */
+    max-width: 500px;
+    /* Set a maximum width */
+    width: 90%;
+    /* Use a percentage for responsiveness */
+    margin: auto;
+    /* Center the container */
+    margin-top: 10vh;
+    border: 1px solid #2e6da4;
+    padding: 20px;
+    /* Add some padding */
+}
+
+/* -------------------------------------------------------------- */
+
+#containerHeadingBox {
+    background-color: white;
+    width: 100%;
+    /* Full width */
+    text-align: center;
+}
+
+#containerHeadingBox h1 {
+    color: #2e6da4;
+    margin: 10px 0;
+    /* Vertical margin only */
+}
+
+/* -------------------------------------------------------------- */
+
+#emailBox,
+#passwordBox {
+    margin: 20px 0;
+    /* Use vertical margins only */
+    width: 100%;
+    /* Full width */
+}
+
+#emailBox label,
+#passwordBox label {
+    margin-bottom: 10px;
+    font-size: 23px;
+    color: #2e6da4;
+    display: block;
+    /* Make labels block to stack */
+}
+
+#emailBox input,
+#passwordBox input {
+    font-size: 1rem;
+    /* Use rem for scalability */
+    display: block;
+    width: 80%;
+    margin: 10px auto;
+    /* Center input fields */
+}
+
+/* ----------------------------------------------------------------------*/
+
+#forgotBox {
+    width: 100%;
+    /* Full width */
+    text-align: right;
+}
+
+#forgotBox a {
+    text-decoration: none;
+    color: #2e6da4e0;
+    font-size: 18px;
+}
+
+#forgotBox a:hover {
+    text-decoration: underline;
+    color: #2e6da4;
+}
+
+/* ----------------------------------------------------------------------*/
+
+#login {
+    margin: 15px auto;
+    /* Center the button */
+    font-size: x-large;
+    text-align: center;
+    width: 80%;
+    height: 40px;
+    color: white;
+    background-color: #2e6da4ee;
+    cursor: pointer;
+    display: block;
+    /* Make the button a block element */
+}
+
+#login:hover {
+    background-color: #2e6da4;
+}
+
+/* ----------------------------------------------------------------------*/
+
+#signup {
+    margin-top: 20px;
+    font-size: 16px;
+    text-align: center;
+}
+
+#signup a {
+    text-decoration: none;
+    color: #2e6da4d7;
+}
+
+#signup a:hover {
+    text-decoration: underline;
+    color: #2e6da4;
+}
+
+#goBackLink {
+    margin-top: 10px;
+    display: block;
+    text-align: center;
+}
+
+/* Media Queries for Responsive Design */
+
+@media (max-width: 768px) {
+
+    /* Tablet and smaller devices */
+    #container {
+        padding: 15px;
+        /* Adjust padding */
+    }
+
+    #emailBox input,
+    #passwordBox input {
+        width: 90%;
+        /* Adjust input field width */
+    }
+}
+
+@media (max-width: 480px) {
+
+    /* Mobile devices */
+    #container {
+        width: 95%;
+        /* Adjust width for mobile */
+    }
+
+    #containerHeadingBox h1 {
+        font-size: 1.5rem;
+        /* Responsive heading size */
+    }
+
+    #emailBox label,
+    #passwordBox label {
+        font-size: 20px;
+        /* Smaller font size */
+    }
+
+    #login {
+        font-size: large;
+        /* Responsive button size */
+    }
+
+    #signup {
+        font-size: 14px;
+        /* Smaller signup link font */
+    }
+}
