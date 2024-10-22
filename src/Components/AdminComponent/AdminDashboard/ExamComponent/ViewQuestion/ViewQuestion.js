@@ -4,7 +4,6 @@ import axios from "axios";
 import style from "../../SubjectComponent/Subject.module.css";
 
 function ViewQuestion() {
-    // States
     const [display, setDisplay] = useState({ display: "none" });
     const [questions, setQuestions] = useState([]);
     const [updatedQ, setUpdatedQ] = useState({
@@ -22,24 +21,23 @@ function ViewQuestion() {
     const { id } = useParams();
     const history = useHistory();
 
-    // Fetching All Questions
+    const getAllQuestions = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await axios.get("http://localhost:3333/question");
+            setQuestions(response.data);
+        } catch (error) {
+            setError("Error fetching questions. Please try again later.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const getAllQuestions = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                const response = await axios.get("http://localhost:3333/question");
-                setQuestions(response.data);
-            } catch (error) {
-                setError("Error fetching questions. Please try again later.");
-            } finally {
-                setLoading(false);
-            }
-        };
         getAllQuestions();
     }, []);
 
-    // Handling Text Field Change
     const onTextFieldChange = (e) => {
         setUpdatedQ({
             ...updatedQ,
@@ -47,24 +45,25 @@ function ViewQuestion() {
         });
     };
 
-    // Setting Data in Input Field
     const setDataInInputField = (questionId) => {
-        const question = questions.find(q => parseInt(q.id) === parseInt(questionId));
+        const question = questions.find(q => q.id === questionId);
         if (question) {
             setUpdatedQ(question);
+            setDisplay({ display: "block" });
+        } else {
+            setError("Question not found.");
         }
-        setDisplay({ display: "block" });
     };
 
-    // Update Question
     const updateQuestion = async () => {
         setLoading(true);
         setError(null);
         try {
-            await axios.put(`http://localhost:3333/question/${updatedQ.id}`, updatedQ);
+            const { id, ...questionData } = updatedQ; // Exclude the id from the object being sent
+            await axios.put(`http://localhost:3333/question/${id}`, questionData);
             alert("Question updated successfully!");
             setDisplay({ display: "none" });
-            // Optionally refresh the questions list
+            getAllQuestions();  // Refresh questions list after update
         } catch (error) {
             setError("Error updating the question. Please try again later.");
         } finally {
@@ -72,14 +71,16 @@ function ViewQuestion() {
         }
     };
 
-    // Delete Question
     const deleteQuestion = async (questionId) => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this question?");
+        if (!confirmDelete) return; // Exit if the user cancels
+
         setLoading(true);
         setError(null);
         try {
             await axios.delete(`http://localhost:3333/question/${questionId}`);
             alert("Question deleted successfully!");
-            // Optionally refresh the questions list
+            getAllQuestions();  // Refresh questions list after delete
         } catch (error) {
             setError("Error deleting the question. Please try again later.");
         } finally {
@@ -87,12 +88,10 @@ function ViewQuestion() {
         }
     };
 
-    // Go Back
     const handleGoBack = () => {
         history.push("/AdminDashboard/Exam");
     };
 
-    // Error handling UI
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
 
@@ -115,10 +114,10 @@ function ViewQuestion() {
                         </tr>
                     </thead>
                     <tbody>
-                        {questions.map((data, i) => {
+                        {questions.map((data) => {
                             if (parseInt(data.exam_id) === parseInt(id)) {
                                 return (
-                                    <tr key={i}>
+                                    <tr key={data.id}>
                                         <td>{data.question_name}</td>
                                         <td>{data.option_one}</td>
                                         <td>{data.option_two}</td>
@@ -142,33 +141,35 @@ function ViewQuestion() {
                 <button onClick={handleGoBack}>Go Back</button>
             </div>
 
-            <div id={style.addBox} style={display}>
-                <label>Enter Question </label>
-                <input value={updatedQ.question_name} onChange={onTextFieldChange} name="question_name" type="text" placeholder="Enter Question " />
+            {display.display === "block" && (
+                <div id={style.addBox} style={display}>
+                    <label>Enter Question </label>
+                    <input value={updatedQ.question_name} onChange={onTextFieldChange} name="question_name" type="text" placeholder="Enter Question " />
 
-                <label>Enter Option A </label>
-                <input value={updatedQ.option_one} onChange={onTextFieldChange} name="option_one" type="text" placeholder="Enter Option A" />
+                    <label>Enter Option A </label>
+                    <input value={updatedQ.option_one} onChange={onTextFieldChange} name="option_one" type="text" placeholder="Enter Option A" />
 
-                <label>Enter Option B </label>
-                <input value={updatedQ.option_two} onChange={onTextFieldChange} name="option_two" type="text" placeholder="Enter Option B" />
+                    <label>Enter Option B </label>
+                    <input value={updatedQ.option_two} onChange={onTextFieldChange} name="option_two" type="text" placeholder="Enter Option B" />
 
-                <label>Enter Option C </label>
-                <input value={updatedQ.option_three} onChange={onTextFieldChange} name="option_three" type="text" placeholder="Enter Option C" />
+                    <label>Enter Option C </label>
+                    <input value={updatedQ.option_three} onChange={onTextFieldChange} name="option_three" type="text" placeholder="Enter Option C" />
 
-                <label>Enter Option D </label>
-                <input value={updatedQ.option_four} onChange={onTextFieldChange} name="option_four" type="text" placeholder="Enter Option D" />
+                    <label>Enter Option D </label>
+                    <input value={updatedQ.option_four} onChange={onTextFieldChange} name="option_four" type="text" placeholder="Enter Option D" />
 
-                <label>Enter Question Answer </label>
-                <input value={updatedQ.question_answer} onChange={onTextFieldChange} name="question_answer" type="text" placeholder="Enter Answer" />
+                    <label>Enter Question Answer </label>
+                    <input value={updatedQ.question_answer} onChange={onTextFieldChange} name="question_answer" type="text" placeholder="Enter Answer" />
 
-                <label>Enter Subject </label>
-                <input value={updatedQ.subject_name} onChange={onTextFieldChange} name="subject_name" type="text" placeholder="Enter Subject" />
+                    <label>Enter Subject </label>
+                    <input value={updatedQ.subject_name} onChange={onTextFieldChange} name="subject_name" type="text" placeholder="Enter Subject" />
 
-                <div id={style.buttonBox}>
-                    <button onClick={updateQuestion}>Update Question</button>
-                    <button onClick={() => setDisplay({ display: "none" })}>Close</button>
+                    <div id={style.buttonBox}>
+                        <button onClick={updateQuestion}>Update Question</button>
+                        <button onClick={() => setDisplay({ display: "none" })}>Close</button>
+                    </div>
                 </div>
-            </div>
+            )}
         </>
     );
 }

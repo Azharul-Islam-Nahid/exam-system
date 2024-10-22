@@ -1,38 +1,51 @@
-
-
 import style from "../../SubjectComponent/Subject.module.css";
-
 import { useParams, useHistory } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 function Student() {
-
     const { id } = useParams();
-
-    const [email, setEmail] = useState();
-
+    const [email, setEmail] = useState("");
     const [result, setResult] = useState([]);
+    const [error, setError] = useState(""); // State for error messages
 
+    // Fetch student email by ID
     useEffect(() => {
         async function getStudentEmail() {
-            //user whose result we have to fetch
-            let value = await axios.get(`http://localhost:3333/user/${id}`);
-            setEmail(value.data.user_email);
-
+            try {
+                const value = await axios.get(`http://localhost:3333/user/${id}`);
+                setEmail(value.data.user_email);
+            } catch (error) {
+                setError("Error fetching student email.");
+                console.error("Error fetching student email:", error);
+            }
         }
         getStudentEmail();
-    })
+    }, [id]);
 
-
-    useEffect(() => {
-        async function getAllResult() {
-            let value = await axios.get("http://localhost:3333/result");
-            setResult(value.data);
+    // Fetch results by student email
+    const fetchResultsByEmail = async (email) => {
+        try {
+            const response = await axios.get(`http://localhost:3333/result/email/${email}`);
+            if (response.data.length === 0) {
+                setError("No results found for this student email.");
+                setResult([]); // Clear results if no matches found
+            } else {
+                setResult(response.data);
+                setError(""); // Clear any previous errors
+            }
+        } catch (error) {
+            setError("Error fetching results for this student email.");
+            console.error("Error fetching results:", error);
         }
-        getAllResult();
-    }, [])
+    };
 
+    // Fetch results once the email is available
+    useEffect(() => {
+        if (email) {
+            fetchResultsByEmail(email);
+        }
+    }, [email]);
 
     const history = useHistory();
 
@@ -45,6 +58,9 @@ function Student() {
             <div id={style.displayHeadingBox}>
                 <h2>Student Exam List</h2>
             </div>
+
+            {/* Display Error Message */}
+            {error && <div style={{ color: "red" }}>{error}</div>}
 
             <div id={style.tableBox}>
                 <table>
@@ -59,24 +75,22 @@ function Student() {
                         </tr>
                     </thead>
                     <tbody>
-                        {
-                            result.map((data, i) => {
-                                if (data.user_email === email)
-                                    return (
-                                        <tr key={i}>
-                                            <td>{data.user_email}</td>
-                                            <td>{data.exam_name}</td>
-                                            <td>{data.exam_date}</td>
-                                            <td>{data.result_status}</td>
-                                            <td>{data.result_score}</td>
-                                            <td>{data.total_marks}</td>
-                                        </tr>
-                                    );
-
-                                return <React.Fragment key={i}></React.Fragment>;
-                            })
-                        }
-
+                        {result.length > 0 ? (
+                            result.map((data, i) => (
+                                <tr key={i}>
+                                    <td>{data.user_email}</td>
+                                    <td>{data.exam_name}</td>
+                                    <td>{data.exam_date}</td>
+                                    <td>{data.result_status}</td>
+                                    <td>{data.result_score}</td>
+                                    <td>{data.total_marks}</td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="6">No results available.</td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </div>

@@ -6,6 +6,7 @@ import axios from "axios";
 function AddQuestion() {
   const { id } = useParams(); // Get exam ID from URL parameters
   const [question, setQuestion] = useState({
+    id: "", // Unique ID for the question
     question_name: "",
     option_one: "",
     option_two: "",
@@ -32,9 +33,13 @@ function AddQuestion() {
   }
 
   // Function to add a new question by posting it to the server
-  async function addnewQuestion() {
+  async function addNewQuestion() {
     try {
+      // Generate a unique ID (e.g., based on the current time)
+      question.id = Date.now().toString(); // Simple unique ID generation
+
       await axios.post("http://localhost:3333/question", question);
+      alert("Question added successfully!"); // Alert for successful addition
       history.push(`/AdminDashboard/Exam/ViewQuestion/${id}`);
     } catch (error) {
       console.error("Error adding question:", error);
@@ -50,7 +55,7 @@ function AddQuestion() {
       <div id={style.addBox} className={style.addQuestion}>
         <label>Question Name</label>
         <input
-          onChange={(e) => onInputChange(e)}
+          onChange={onInputChange}
           name="question_name"
           type="text"
           placeholder="Enter Question"
@@ -58,7 +63,7 @@ function AddQuestion() {
 
         <label>Enter Option A</label>
         <input
-          onChange={(e) => onInputChange(e)}
+          onChange={onInputChange}
           name="option_one"
           type="text"
           placeholder="Enter Option A"
@@ -66,7 +71,7 @@ function AddQuestion() {
 
         <label>Enter Option B</label>
         <input
-          onChange={(e) => onInputChange(e)}
+          onChange={onInputChange}
           name="option_two"
           type="text"
           placeholder="Enter Option B"
@@ -74,7 +79,7 @@ function AddQuestion() {
 
         <label>Enter Option C</label>
         <input
-          onChange={(e) => onInputChange(e)}
+          onChange={onInputChange}
           name="option_three"
           type="text"
           placeholder="Enter Option C"
@@ -82,7 +87,7 @@ function AddQuestion() {
 
         <label>Enter Option D</label>
         <input
-          onChange={(e) => onInputChange(e)}
+          onChange={onInputChange}
           name="option_four"
           type="text"
           placeholder="Enter Option D"
@@ -90,7 +95,7 @@ function AddQuestion() {
 
         <label>Enter Question Answer</label>
         <input
-          onChange={(e) => onInputChange(e)}
+          onChange={onInputChange}
           name="question_answer"
           type="text"
           placeholder="Enter Question answer (don't write option A,B,C,D)"
@@ -98,14 +103,14 @@ function AddQuestion() {
 
         <label>Enter Subject</label>
         <input
-          onChange={(e) => onInputChange(e)}
+          onChange={onInputChange}
           name="subject_name"
           type="text"
           placeholder="Enter Subject"
         />
 
         <div id={style.buttonBox}>
-          <button onClick={addnewQuestion}>Add</button>
+          <button onClick={addNewQuestion}>Add</button>
           <button onClick={handleGoBack}>Go back</button>
         </div>
       </div>

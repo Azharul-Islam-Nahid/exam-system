@@ -13,7 +13,7 @@ function Exam() {
     useEffect(() => {
         async function getAllExam() {
             try {
-                let response = await axios.get("http://localhost:3333/Exam")
+                let response = await axios.get("http://localhost:3333/exam"); // Corrected endpoint
                 console.log("Fetched exams:", response.data);
                 setExams(response.data);
             } catch (error) {
@@ -43,7 +43,7 @@ function Exam() {
 
     async function handleAddNewExam() {
         try {
-            const newExamResponse = await axios.post("http://localhost:3333/Exam", exam);
+            const newExamResponse = await axios.post("http://localhost:3333/exam", exam); // Corrected endpoint
             console.log("New exam added:", newExamResponse.data);
             setExams([...exams, newExamResponse.data]); // Add the new exam to the state
             setShowExamForm(false); // Close the form
@@ -78,12 +78,12 @@ function Exam() {
     async function deleteExam(id) {
         try {
             // Delete all related questions first
-            for (let i = 0; i < questions.length; i++) {
-                if (questions[i].exam_id === id) {
-                    await axios.delete(`http://localhost:3333/question/${questions[i].id}`);
+            for (let question of questions) {
+                if (question.exam_id === id) {
+                    await axios.delete(`http://localhost:3333/question/${question.id}`);
                 }
             }
-            await axios.delete(`http://localhost:3333/${id}`);
+            await axios.delete(`http://localhost:3333/exam/${id}`); // Corrected endpoint for deleting an exam
             setExams(exams.filter((exam) => exam.id !== id)); // Update exams after deletion
         } catch (error) {
             console.error("Error deleting exam:", error);
@@ -108,20 +108,20 @@ function Exam() {
                         </tr>
                     </thead>
                     <tbody id={style.tbody}>
-                        {exams.map((data, i) => (
-                            <tr key={data.id}> {/* Use data.id for key */}
+                        {exams.map((data) => (
+                            <tr key={data.id}>
                                 <td>{data.exam_name}</td>
                                 <td>{data.exam_desc}</td>
                                 <td>{data.exam_date}</td>
                                 <td>{data.exam_level}</td>
                                 <td>
-                                    <NavLink exact to={`/AdminDashboard/Exam/Details/${data.id}`}>
+                                    <NavLink to={`/AdminDashboard/Exam/Details/${data.id}`}>
                                         <button>Details</button>
                                     </NavLink>
-                                    <NavLink exact to={`/AdminDashboard/Exam/ViewQuestion/${data.id}`}>
+                                    <NavLink to={`/AdminDashboard/Exam/ViewQuestion/${data.id}`}>
                                         <button>View Question</button>
                                     </NavLink>
-                                    <NavLink exact to={`/AdminDashboard/Exam/AddQuestion/${data.id}`}>
+                                    <NavLink to={`/AdminDashboard/Exam/AddQuestion/${data.id}`}>
                                         <button>Add Question</button>
                                     </NavLink>
                                     <button onClick={() => deleteExam(data.id)}>Delete</button>
