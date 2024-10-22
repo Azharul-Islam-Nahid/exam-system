@@ -13,13 +13,13 @@ function Home() {
         <>
             <div id={style.header}>
                 <div id={style.headerHeadingBox}>
-                    <h3>Online Exam System</h3>
+                    <h3>ONLINE ASSESSMENT PLATFORM</h3>
                 </div>
             </div>
 
             <div id={style.div1}>
                 <img src={pic1} alt="" />
-                <span>Online Exam</span>
+                <span>ONLINE ASSESSMENT PLATFORM</span>
             </div>
 
 
